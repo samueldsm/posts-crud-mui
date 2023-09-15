@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -10,23 +10,20 @@ import DialogContent from "@mui/material/DialogContent";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import MinHeightTextarea from "../ui/Textarea";
-export const FormDialog = () => {
-  const [open, setOpen] = useState(true);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+interface Props {
+  openForm: boolean;
+  setOpenForm: (openForm: boolean) => void;
+}
 
+export const FormDialog: FC<Props> = ({ openForm, setOpenForm }) => {
   const handleClose = () => {
-    setOpen(false);
+    setOpenForm(false);
   };
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={openForm} onClose={handleClose}>
         <DialogTitle>Add a new post</DialogTitle>
         <IconButton
           aria-label="close"

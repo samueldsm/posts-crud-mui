@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { IPost } from "@/interfaces/post";
 
 export default function PostsPage() {
+  const [openForm, setOpenForm] = useState(true);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const { isLoading, posts } = useAppSelector((state) => state.post);
@@ -35,6 +36,7 @@ export default function PostsPage() {
   };
 
   function handleEdit(row: number) {
+    setOpenForm(true);
     console.log("Edit", row);
   }
 
@@ -87,7 +89,7 @@ export default function PostsPage() {
           sx={{ mt: 2, paddingLeft: 4, paddingRight: 4, minWidth: 700 }}
         >
           <Grid item xs={8}>
-            <AddButton />
+            <AddButton setOpenForm={setOpenForm} />
           </Grid>
           <Grid
             item
@@ -114,7 +116,7 @@ export default function PostsPage() {
             />
           </Grid>
         </Grid>
-        <FormDialog />
+        <FormDialog openForm={openForm} setOpenForm={setOpenForm} />
 
         <DeleteDialog
           openDeleteDialog={openDeleteDialog}
