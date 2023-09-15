@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Define a type for the slice state
+import { IPost } from "@/interfaces/post";
 export interface PostState {
-  posts: [];
+  posts: IPost[];
   isLoading: boolean;
 }
 

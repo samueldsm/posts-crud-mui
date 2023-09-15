@@ -3,7 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/dist/query";
 
 import postReducer from "./slices/post/postSlice";
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     post: postReducer,
   },
@@ -11,7 +11,9 @@ export const store = configureStore({
 });
 
 setupListeners(store.dispatch);
-// Infer the `RootState` and `AppDispatch` types from the store itself
+
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {counterId: counterIdState, comments: CommentsState, users: UsersState}
+
 export type AppDispatch = typeof store.dispatch;
+
+export default store;
