@@ -23,7 +23,7 @@ export const postSlice = createSlice({
     },
     addPost: (state, action: PayloadAction<any>) => {
       const { id, title, body } = action.payload;
-      state.posts.push({ id, title, body });
+      state.posts.unshift({ id, title, body });
     },
     updatePost: (state, action: PayloadAction<any>) => {
       const { id, title, body } = action.payload;

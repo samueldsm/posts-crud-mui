@@ -12,6 +12,11 @@ import IconButton from "@mui/material/IconButton";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addPost, updatePost } from "@/redux/slices/post";
 import { IPost } from "@/interfaces";
+import { useForm } from "react-hook-form";
+
+import { validateTrim } from "@/util/validation";
+import { toast } from "react-toastify";
+import Typography from "@mui/material/Typography";
 
 interface Props {
   isUpdate: boolean;
@@ -32,9 +37,13 @@ export const FormDialog: FC<Props> = ({
 }) => {
   const [title, setTitle] = useState<string>("");
   const [body, setBody] = useState<string>("");
-
-  const { posts } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     editPost.title && setTitle(editPost.title);
@@ -47,24 +56,10 @@ export const FormDialog: FC<Props> = ({
     setOpenForm(false);
     setIsUpdate(false);
     setEditPost({ userId: -1, title: "", body: "", id: -1 });
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    const formData = { title, body };
-    console.log(formData);
-    // const formData = {
-    //     title,
-    // };
-
-    // await dispatch(createTask(formData)).then(() => {
-    //     dispatch(readTasks());
-    //     setTitle('');
-    // });
+    reset();
   };
 
   const handleAddPost = (e: any) => {
-    e.preventDefault();
     if (!title && !body) return;
 
     const newPost = {
@@ -74,15 +69,19 @@ export const FormDialog: FC<Props> = ({
       userId: 1, //Always "1" only for test
     };
 
-    dispatch(addPost(newPost));
-
+    try {
+      dispatch(addPost(newPost));
+    } catch (error) {
+      toast.error("Error during update");
+    }
+    toast.success("The post was successfully updated");
     // Reset form fields
     setTitle("");
     setBody("");
     handleClose();
   };
+
   const handleEditPost = (e: any) => {
-    e.preventDefault();
     console.log(e);
     if (!title && !body) return;
 
@@ -99,10 +98,15 @@ export const FormDialog: FC<Props> = ({
     setBody("");
     handleClose();
   };
+  // Validation not only whitespace
+  const validateInput = (value: string) => validateTrim(value);
+
   return (
     <div>
-      <form onSubmit={isUpdate ? handleEditPost : handleAddPost}>
-        <Dialog open={openForm} onClose={() => handleClose()}>
+      <Dialog open={openForm} onClose={() => handleClose()}>
+        <form
+          onSubmit={handleSubmit(isUpdate ? handleEditPost : handleAddPost)}
+        >
           <DialogTitle>{isUpdate ? "Edit Post" : "Add a new post"}</DialogTitle>
           <IconButton
             aria-label="close"
@@ -126,9 +130,28 @@ export const FormDialog: FC<Props> = ({
               margin="dense"
               variant="outlined"
               fullWidth
-              onChange={(e) => setTitle(e.target.value)}
-              autoFocus={true}
+              maxLength={250}
+              minLength={1}
+              placeholder="Enter a title"
+              {...register("title", {
+                required: "Title is required",
+                maxLength: {
+                  value: 250,
+                  message: "The title cannot be longer than 250 characters.",
+                },
+                minLength: {
+                  value: 1,
+                  message: "The title cannot be less than 1 character.",
+                },
+                validate: validateInput,
+                onChange: (e) => setTitle(e.target.value),
+              })}
             />
+            {errors.title && typeof errors.title?.message === "string" && (
+              <Typography className="errorMessage">
+                {errors.title.message}
+              </Typography>
+            )}
             <TextField
               id="body"
               type="text"
@@ -136,24 +159,29 @@ export const FormDialog: FC<Props> = ({
               value={body}
               margin="dense"
               variant="outlined"
-              onChange={(e) => setBody(e.target.value)}
               fullWidth
+              {...register("body", {
+                required: "Description is required",
+                validate: validateInput,
+                onChange: (e) => setBody(e.target.value),
+              })}
             />
+            {errors.body && typeof errors.body?.message === "string" && (
+              <Typography className="errorMessage">
+                {errors.body.message}
+              </Typography>
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={() => handleClose()} color="inherit">
               Cancel
             </Button>
-            <Button
-              type="submit"
-              color="primary"
-              onClick={isUpdate ? handleEditPost : handleAddPost}
-            >
+            <Button type="submit" color="primary">
               {isUpdate ? "Edit Post" : "Add Post"}
             </Button>
           </DialogActions>
-        </Dialog>
-      </form>
+        </form>
+      </Dialog>
     </div>
   );
 };

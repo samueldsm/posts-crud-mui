@@ -25,3 +25,7 @@
   -webkit-animation-name: fadeIn;
   animation-name: fadeIn;
 }
+
+.errorMessage {
+  color: #c20e4d;
+}
