@@ -7,6 +7,7 @@ export interface PostState {
 // Define the initial state using that type
 const initialState = {
   posts: [],
+  isLoading: false,
 } as any;
 
 export const postSlice = createSlice({
@@ -21,20 +22,20 @@ export const postSlice = createSlice({
       state.posts = action.payload.posts;
     },
     addPost: (state, action: PayloadAction<any>) => {
-      const { id, title, description } = action.payload;
-      state.push({ id, title, description });
+      const { id, title, body } = action.payload;
+      state.posts.push({ id, title, body });
     },
     updatePost: (state, action: PayloadAction<any>) => {
-      const { id, title, description } = action.payload;
-      const postIndex = state.findIndex((post: any) => post.id === id);
+      const { id, title, body } = action.payload;
+      const postIndex = state.posts.findIndex((post: any) => post.id === id);
       if (postIndex !== -1) {
-        state[postIndex].title = title;
-        state[postIndex].description = description;
+        state.posts[postIndex].title = title;
+        state.posts[postIndex].body = body;
       }
     },
     deletePost: (state, action: PayloadAction<any>) => {
       const postId = action.payload;
-      return state.filter((post: any) => post.id !== postId);
+      state.posts = state.posts.filter((post: IPost) => post.id !== postId);
     },
   },
 });

@@ -21,28 +21,35 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { IPost } from "@/interfaces/post";
 
 export default function PostsPage() {
+  const [postId, setPostId] = useState(-1);
+  const [isUpdate, setIsUpdate] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
+  const [editPost, setEditPost] = useState<IPost>({
+    id: -1,
+    body: "",
+    title: "",
+    userId: -1,
+  });
   const { loading, posts } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(getPost());
   }, []);
 
   const handleClickOpenDeleteDialog = (id: number) => {
-    console.log("Delete ", id);
+    setPostId(id);
     setOpenDeleteDialog(true);
   };
 
-  function handleEdit(row: number) {
+  function handleEdit(id: number) {
+    const editableData: IPost = posts.find((post: IPost) => post.id === id);
+    setEditPost(editableData);
+    setIsUpdate(true);
     setOpenForm(true);
     // dispatch(addPost(posts.find((post) => post.id === row)));
-    console.log("Edit", row);
-  }
-
-  function handleDelete(row: number) {
-    console.log("Delete", row);
+    console.log("Edit", id);
   }
 
   const columns: GridColDef[] = [
@@ -117,9 +124,18 @@ export default function PostsPage() {
             />
           </Grid>
         </Grid>
-        <FormDialog openForm={openForm} setOpenForm={setOpenForm} />
+        <FormDialog
+          openForm={openForm}
+          editPost={editPost}
+          isUpdate={isUpdate}
+          setIsUpdate={setIsUpdate}
+          setOpenForm={setOpenForm}
+          setEditPost={setEditPost}
+        />
 
         <DeleteDialog
+          postId={postId}
+          setPostId={setPostId}
           openDeleteDialog={openDeleteDialog}
           setOpenDeleteDialog={setOpenDeleteDialog}
         />
