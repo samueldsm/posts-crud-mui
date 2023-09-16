@@ -21,10 +21,10 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { IPost } from "@/interfaces/post";
 
 export default function PostsPage() {
-  const [openForm, setOpenForm] = useState(true);
+  const [openForm, setOpenForm] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
-  const { isLoading, posts } = useAppSelector((state) => state.post);
+  const { loading, posts } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getPost());
@@ -37,6 +37,7 @@ export default function PostsPage() {
 
   function handleEdit(row: number) {
     setOpenForm(true);
+    // dispatch(addPost(posts.find((post) => post.id === row)));
     console.log("Edit", row);
   }
 
@@ -105,7 +106,7 @@ export default function PostsPage() {
               columns={columns}
               hideFooterSelectedRowCount
               //Edit for when is loading
-              loading={isLoading}
+              loading={loading}
               // density="compact"
               initialState={{
                 pagination: {

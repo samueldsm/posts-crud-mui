@@ -1,8 +1,14 @@
-import * as React from "react";
-import { TextareaAutosize } from "@mui/base/TextareaAutosize";
-import { styled } from "@mui/system";
+import { FC } from "react";
 
-export default function MinHeightTextarea() {
+import { styled } from "@mui/system";
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
+
+interface Props {
+  body: string;
+  setBody: (body: string) => void;
+}
+
+const MinHeightTextarea: FC<Props> = ({ body, setBody }) => {
   const blue = {
     100: "#DAECFF",
     200: "#b6daff",
@@ -60,6 +66,16 @@ export default function MinHeightTextarea() {
   );
 
   return (
-    <StyledTextarea aria-label="body" minRows={3} placeholder="Description" />
+    <StyledTextarea
+      id="body"
+      value={body}
+      minRows={3}
+      typeof="text"
+      aria-label="body"
+      placeholder="Description"
+      onChange={(e) => setBody(e.target.value)}
+    />
   );
-}
+};
+
+export default MinHeightTextarea;
