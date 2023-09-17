@@ -16,10 +16,10 @@ import { FormDialog } from "../components/posts/formDialog";
 import { SearchInput } from "../components/ui/";
 import { DeleteDialog } from "../components/posts/deleteDialog";
 
+import Notify from "@/components/toast/notify";
 import { IPost } from "@/interfaces";
 import { getPost } from "@/redux/slices/post";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import Notify from "@/components/toast/notify";
 
 export default function PostsPage() {
   const [postId, setPostId] = useState(-1);
@@ -58,7 +58,7 @@ export default function PostsPage() {
     {
       field: "options",
       headerName: "Options",
-      flex: 0.1,
+      width: 120,
       renderCell: ({ row }: GridRenderCellParams) => {
         return (
           //TODO: Make this <ButtonGroup/>  with a responsive design

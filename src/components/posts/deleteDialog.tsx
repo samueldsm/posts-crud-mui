@@ -10,6 +10,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { deletePost, deletePostThunk } from "@/redux/slices/post";
 import { toast } from "react-toastify";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 interface Props {
   postId: number;
@@ -26,6 +28,9 @@ export const DeleteDialog: FC<Props> = ({
 }) => {
   const { isLoading } = useAppSelector((state) => state.post); //my State
   const dispatch = useAppDispatch();
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
@@ -46,6 +51,7 @@ export const DeleteDialog: FC<Props> = ({
       <Dialog
         open={openDeleteDialog}
         onClose={handleCloseDeleteDialog}
+        fullScreen={fullScreen}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >

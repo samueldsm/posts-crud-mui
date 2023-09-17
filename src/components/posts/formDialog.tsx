@@ -17,6 +17,8 @@ import { IPost } from "@/interfaces";
 import { validateTrim } from "@/util/validation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addPostThunk, updatePostThunk } from "@/redux/slices/post";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 interface Props {
   isUpdate: boolean;
@@ -53,6 +55,9 @@ export const FormDialog: FC<Props> = ({
 
   // Validation not only whitespace
   const validateInput = (value: string) => validateTrim(value);
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleClose = () => {
     setOpenForm(false);
@@ -102,88 +107,89 @@ export const FormDialog: FC<Props> = ({
   };
 
   return (
-    <div>
-      <Dialog open={openForm} onClose={() => handleClose()}>
-        <form
-          onSubmit={handleSubmit(isUpdate ? handleEditPost : handleAddPost)}
+    <Dialog
+      open={openForm}
+      onClose={() => handleClose()}
+      fullScreen={fullScreen}
+    >
+      <form onSubmit={handleSubmit(isUpdate ? handleEditPost : handleAddPost)}>
+        <DialogTitle>{isUpdate ? "Edit Post" : "Add a new post"}</DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={() => handleClose()}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
         >
-          <DialogTitle>{isUpdate ? "Edit Post" : "Add a new post"}</DialogTitle>
-          <IconButton
-            aria-label="close"
-            onClick={() => handleClose()}
-            sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-          {/* TODO: finish this design  */}
-          <DialogContent dividers>
-            <TextField
-              id="title"
-              type="text"
-              label="Title"
-              value={title}
-              margin="dense"
-              variant="outlined"
-              fullWidth
-              maxLength={250}
-              minLength={1}
-              placeholder="Enter a title"
-              {...register("title", {
-                required: "Title is required",
-                maxLength: {
-                  value: 250,
-                  message: "The title cannot be longer than 250 characters.",
-                },
-                minLength: {
-                  value: 1,
-                  message: "The title cannot be less than 1 character.",
-                },
-                validate: validateInput,
-                onChange: (e) => setTitle(e.target.value),
-              })}
-            />
-            {errors.title && typeof errors.title?.message === "string" && (
-              <Typography className="errorMessage">
-                {errors.title.message}
-              </Typography>
-            )}
-            <TextField
-              id="body"
-              type="text"
-              label="Body"
-              value={body}
-              margin="dense"
-              variant="outlined"
-              multiline
-              rows={4}
-              fullWidth
-              {...register("body", {
-                required: "Description is required",
-                validate: validateInput,
-                onChange: (e) => setBody(e.target.value),
-              })}
-            />
-            {errors.body && typeof errors.body?.message === "string" && (
-              <Typography className="errorMessage">
-                {errors.body.message}
-              </Typography>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => handleClose()} color="inherit">
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isLoading} color="primary">
-              {isUpdate ? "Edit Post" : "Add Post"}
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </div>
+          <CloseIcon />
+        </IconButton>
+        {/* TODO: finish this design  */}
+        <DialogContent dividers>
+          <TextField
+            id="title"
+            type="text"
+            label="Title"
+            value={title}
+            margin="dense"
+            variant="outlined"
+            maxLength={250}
+            minLength={1}
+            autoFocus
+            fullWidth
+            placeholder="Enter a title"
+            {...register("title", {
+              required: "Title is required",
+              maxLength: {
+                value: 250,
+                message: "The title cannot be longer than 250 characters.",
+              },
+              minLength: {
+                value: 1,
+                message: "The title cannot be less than 1 character.",
+              },
+              validate: validateInput,
+              onChange: (e) => setTitle(e.target.value),
+            })}
+          />
+          {errors.title && typeof errors.title?.message === "string" && (
+            <Typography className="errorMessage">
+              {errors.title.message}
+            </Typography>
+          )}
+          <TextField
+            id="body"
+            type="text"
+            rows={4}
+            label="Body"
+            value={body}
+            margin="dense"
+            variant="outlined"
+            multiline
+            fullWidth
+            {...register("body", {
+              required: "Description is required",
+              validate: validateInput,
+              onChange: (e) => setBody(e.target.value),
+            })}
+          />
+          {errors.body && typeof errors.body?.message === "string" && (
+            <Typography className="errorMessage">
+              {errors.body.message}
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClose()} color="inherit">
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isLoading} color="primary">
+            {isUpdate ? "Edit Post" : "Add Post"}
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
   );
 };
