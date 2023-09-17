@@ -159,6 +159,8 @@ export const FormDialog: FC<Props> = ({
               value={body}
               margin="dense"
               variant="outlined"
+              multiline
+              rows={4}
               fullWidth
               {...register("body", {
                 required: "Description is required",
