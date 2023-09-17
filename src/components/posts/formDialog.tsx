@@ -3,20 +3,20 @@ import { FC, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
+import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
 
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { addPost, updatePost } from "@/redux/slices/post";
-import { IPost } from "@/interfaces";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
+import { IPost } from "@/interfaces";
 import { validateTrim } from "@/util/validation";
-import { toast } from "react-toastify";
-import Typography from "@mui/material/Typography";
+import { useAppDispatch } from "@/redux/hooks";
+import { addPosts, updatePost } from "@/redux/slices/post";
 
 interface Props {
   isUpdate: boolean;
@@ -59,7 +59,7 @@ export const FormDialog: FC<Props> = ({
     reset();
   };
 
-  const handleAddPost = (e: any) => {
+  const handleAddPost = () => {
     if (!title && !body) return;
 
     const newPost = {
@@ -70,7 +70,7 @@ export const FormDialog: FC<Props> = ({
     };
 
     try {
-      dispatch(addPost(newPost));
+      dispatch(addPosts(newPost));
     } catch (error) {
       toast.error("Error during update");
     }
@@ -93,9 +93,6 @@ export const FormDialog: FC<Props> = ({
     } as IPost;
 
     dispatch(updatePost(editedPost));
-    // Reset form fields
-    setTitle("");
-    setBody("");
     handleClose();
   };
   // Validation not only whitespace

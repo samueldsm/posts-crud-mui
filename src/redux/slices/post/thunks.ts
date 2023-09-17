@@ -1,40 +1,36 @@
 import { postApi } from "@/api";
 
-import { startLoadingPosts, setPosts } from "./postSlice";
-import { IPost } from "../../../interfaces/post";
+import { IPost } from "@/interfaces";
+import { startLoadingPosts, setPosts, addPost } from "./postSlice";
 
 export const getPost = () => {
   // TODO: Infer types
   return async (dispatch: any, getState: any) => {
     dispatch(startLoadingPosts());
-    const { data } = await postApi.get(`/posts`);
-    dispatch(setPosts({ posts: data as IPost[] }));
+
+    try {
+      const { data } = await postApi.get(`/posts`);
+      dispatch(setPosts({ posts: data as IPost[] }));
+    } catch (error) {
+      console.log("Error fetching posts", error);
+    }
   };
 };
 
-// export const addPosts = () => {
-//   // TODO: Infer types
-//   return async (dispatch: any, getState: any) => {
-//     dispatch(startLoadingPosts());
-
-//     const { post } = getState();
-//     console.log("Posts from getState", post.posts);
-//     const tempPost = {
-//       body: "bodyVal",
-//       title: "titleVal",
-//       userId: 1,
-//     };
-//     const { data } = await postApi.post(`/posts`, tempPost);
-//     console.log("Data del API", data);
-//     const finalData = [
-//       {
-//         ...tempPost,
-//         id: tempPost.title.length + 100,
-//       },
-//       ...post.posts,
-//     ];
-//     console.log(finalData);
-//     // const { data } = await postApi.get(`/posts`);
-//     dispatch(setPosts({ posts: finalData as IPost[] }));
-//   };
-// };
+export const addPosts = (post: IPost) => {
+  // TODO: Infer types
+  return async (dispatch: any, getState: any) => {
+    const tempPost = {
+      body: post.body,
+      title: post.title,
+      userId: 1,
+    };
+    dispatch(startLoadingPosts());
+    try {
+      const { data } = await postApi.post(`/posts`, tempPost);
+      dispatch(addPost(post)); //Most be {data}. it's for test
+    } catch (error) {
+      console.log("Error in POST method", error);
+    }
+  };
+};

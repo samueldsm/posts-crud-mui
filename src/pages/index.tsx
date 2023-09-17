@@ -16,10 +16,9 @@ import { FormDialog } from "../components/posts/formDialog";
 import { SearchInput } from "../components/ui/";
 import { DeleteDialog } from "../components/posts/deleteDialog";
 
+import { IPost } from "@/interfaces";
 import { getPost } from "@/redux/slices/post";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { IPost } from "@/interfaces/post";
-import Notify from "@/components/toast/notify";
 
 export default function PostsPage() {
   const [postId, setPostId] = useState(-1);
