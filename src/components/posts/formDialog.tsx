@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { IPost } from "@/interfaces";
 import { validateTrim } from "@/util/validation";
 import { useAppDispatch } from "@/redux/hooks";
-import { addPosts, updatePost } from "@/redux/slices/post";
+import { addPostThunk, updatePostThunk } from "@/redux/slices/post";
 
 interface Props {
   isUpdate: boolean;
@@ -70,7 +70,7 @@ export const FormDialog: FC<Props> = ({
     };
 
     try {
-      dispatch(addPosts(newPost));
+      dispatch(addPostThunk(newPost));
     } catch (error) {
       toast.error("Error during update");
     }
@@ -92,7 +92,7 @@ export const FormDialog: FC<Props> = ({
       userId: editPost.userId,
     } as IPost;
 
-    dispatch(updatePost(editedPost));
+    dispatch(updatePostThunk(editedPost));
     handleClose();
   };
   // Validation not only whitespace

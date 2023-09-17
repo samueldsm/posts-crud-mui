@@ -22,10 +22,12 @@ export const postSlice = createSlice({
       state.posts = action.payload.posts;
     },
     addPost: (state, action: PayloadAction<any>) => {
+      state.isLoading = false;
       const { id, title, body } = action.payload;
       state.posts.unshift({ id, title, body });
     },
     updatePost: (state, action: PayloadAction<any>) => {
+      state.isLoading = false;
       const { id, title, body } = action.payload;
       const postIndex = state.posts.findIndex((post: any) => post.id === id);
       if (postIndex !== -1) {
@@ -34,6 +36,7 @@ export const postSlice = createSlice({
       }
     },
     deletePost: (state, action: PayloadAction<any>) => {
+      state.isLoading = false;
       const postId = action.payload;
       state.posts = state.posts.filter((post: IPost) => post.id !== postId);
     },
