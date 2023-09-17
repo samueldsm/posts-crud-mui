@@ -24,7 +24,7 @@ export const DeleteDialog: FC<Props> = ({
   openDeleteDialog,
   setOpenDeleteDialog,
 }) => {
-  const { posts } = useAppSelector((state) => state.post); //my State
+  const { isLoading } = useAppSelector((state) => state.post); //my State
   const dispatch = useAppDispatch();
 
   const handleCloseDeleteDialog = () => {
@@ -65,6 +65,7 @@ export const DeleteDialog: FC<Props> = ({
             type="submit"
             onClick={() => handleRemovePost(postId)}
             color="error"
+            disabled={isLoading}
           >
             Yes, delete
           </Button>

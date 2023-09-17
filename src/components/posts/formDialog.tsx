@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 
 import { IPost } from "@/interfaces";
 import { validateTrim } from "@/util/validation";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addPostThunk, updatePostThunk } from "@/redux/slices/post";
 
 interface Props {
@@ -37,6 +37,7 @@ export const FormDialog: FC<Props> = ({
 }) => {
   const [title, setTitle] = useState<string>("");
   const [body, setBody] = useState<string>("");
+  const { isLoading } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
   const {
     reset,
@@ -54,12 +55,12 @@ export const FormDialog: FC<Props> = ({
   const validateInput = (value: string) => validateTrim(value);
 
   const handleClose = () => {
+    setOpenForm(false);
     setBody("");
     setTitle("");
-    setOpenForm(false);
-    setIsUpdate(false);
     setEditPost({ userId: -1, title: "", body: "", id: -1 });
     reset();
+    setIsUpdate(false);
   };
 
   const handleAddPost = async () => {
@@ -175,7 +176,7 @@ export const FormDialog: FC<Props> = ({
             <Button onClick={() => handleClose()} color="inherit">
               Cancel
             </Button>
-            <Button type="submit" color="primary">
+            <Button type="submit" disabled={isLoading} color="primary">
               {isUpdate ? "Edit Post" : "Add Post"}
             </Button>
           </DialogActions>

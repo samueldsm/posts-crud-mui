@@ -32,7 +32,7 @@ export default function PostsPage() {
     title: "",
     userId: -1,
   });
-  const { loading, posts } = useAppSelector((state) => state.post);
+  const { isLoading, posts } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function PostsPage() {
               columns={columns}
               hideFooterSelectedRowCount
               //Edit for when is loading
-              loading={loading}
+              loading={isLoading}
               // density="compact"
               initialState={{
                 pagination: {
