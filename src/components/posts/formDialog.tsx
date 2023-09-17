@@ -81,8 +81,7 @@ export const FormDialog: FC<Props> = ({
     handleClose();
   };
 
-  const handleEditPost = (e: any) => {
-    console.log(e);
+  const handleEditPost = () => {
     if (!title && !body) return;
 
     const editedPost = {

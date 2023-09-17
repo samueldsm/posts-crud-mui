@@ -8,7 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { deletePost } from "@/redux/slices/post";
+import { deletePost, deletePostThunk } from "@/redux/slices/post";
 
 interface Props {
   postId: number;
@@ -31,7 +31,7 @@ export const DeleteDialog: FC<Props> = ({
   };
 
   const handleRemovePost = (id: number) => {
-    dispatch(deletePost(id));
+    dispatch(deletePostThunk(id));
     handleCloseDeleteDialog();
   };
 

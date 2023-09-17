@@ -1,11 +1,17 @@
 import { postApi } from "@/api";
 
 import { IPost } from "@/interfaces";
-import { startLoadingPosts, setPosts, addPost, updatePost } from "./postSlice";
+import {
+  startLoadingPosts,
+  setPosts,
+  addPost,
+  updatePost,
+  deletePost,
+} from "./postSlice";
 import { toast } from "react-toastify";
 
 export const getPost = () => {
-  // TODO: Infer types
+  // TODO: Infer types of dispatch and getState
   return async (dispatch: any, getState: any) => {
     dispatch(startLoadingPosts());
 
@@ -19,7 +25,7 @@ export const getPost = () => {
 };
 
 export const addPostThunk = (post: IPost) => {
-  // TODO: Infer types
+  // TODO: Infer types of dispatch and getState
   return async (dispatch: any, getState: any) => {
     const tempPost = {
       body: post.body,
@@ -37,7 +43,7 @@ export const addPostThunk = (post: IPost) => {
 };
 
 export const updatePostThunk = (post: IPost) => {
-  // TODO: Infer types
+  // TODO: Infer types of dispatch and getState
   return async (dispatch: any, getState: any) => {
     dispatch(startLoadingPosts());
     try {
@@ -45,6 +51,19 @@ export const updatePostThunk = (post: IPost) => {
       dispatch(updatePost(post)); //Most be {data} intend. it's for test
     } catch (error) {
       console.log("Error in PUT method", error);
+    }
+  };
+};
+
+export const deletePostThunk = (id: number) => {
+  // TODO: Infer types of dispatch and getState
+  return async (dispatch: any, getState: any) => {
+    dispatch(startLoadingPosts());
+    try {
+      const { data } = await postApi.delete(`/posts/${id}`);
+      dispatch(deletePost(id)); //Most be {data.id} intend. it's for test
+    } catch (error) {
+      console.log("Error in DELETE method", error);
     }
   };
 };
