@@ -17,8 +17,6 @@ import { IPost } from "@/interfaces";
 import { validateTrim } from "@/util/validation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addPostThunk, updatePostThunk } from "@/redux/slices/post";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 
 interface Props {
   isUpdate: boolean;
@@ -55,9 +53,6 @@ export const FormDialog: FC<Props> = ({
 
   // Validation not only whitespace
   const validateInput = (value: string) => validateTrim(value);
-
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleClose = () => {
     setOpenForm(false);
@@ -107,11 +102,7 @@ export const FormDialog: FC<Props> = ({
   };
 
   return (
-    <Dialog
-      open={openForm}
-      onClose={() => handleClose()}
-      fullScreen={fullScreen}
-    >
+    <Dialog open={openForm} onClose={() => handleClose()}>
       <form onSubmit={handleSubmit(isUpdate ? handleEditPost : handleAddPost)}>
         <DialogTitle>{isUpdate ? "Edit Post" : "Add a new post"}</DialogTitle>
         <IconButton
