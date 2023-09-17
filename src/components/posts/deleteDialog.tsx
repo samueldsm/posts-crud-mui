@@ -9,6 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { deletePost, deletePostThunk } from "@/redux/slices/post";
+import { toast } from "react-toastify";
 
 interface Props {
   postId: number;
@@ -30,8 +31,13 @@ export const DeleteDialog: FC<Props> = ({
     setOpenDeleteDialog(false);
   };
 
-  const handleRemovePost = (id: number) => {
-    dispatch(deletePostThunk(id));
+  const handleRemovePost = async (id: number) => {
+    try {
+      await dispatch(deletePostThunk(id));
+      toast.success("Post deleted successfully");
+    } catch (error) {
+      toast.error("Error deleting post");
+    }
     handleCloseDeleteDialog();
   };
 

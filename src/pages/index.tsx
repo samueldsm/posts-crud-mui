@@ -49,8 +49,6 @@ export default function PostsPage() {
     setEditPost(editableData);
     setIsUpdate(true);
     setOpenForm(true);
-    // dispatch(addPost(posts.find((post) => post.id === row)));
-    console.log("Edit", id);
   }
 
   const columns: GridColDef[] = [

@@ -50,6 +50,9 @@ export const FormDialog: FC<Props> = ({
     editPost.body && setBody(editPost.body);
   }, [editPost]);
 
+  // Validation not only whitespace
+  const validateInput = (value: string) => validateTrim(value);
+
   const handleClose = () => {
     setBody("");
     setTitle("");
@@ -59,7 +62,7 @@ export const FormDialog: FC<Props> = ({
     reset();
   };
 
-  const handleAddPost = () => {
+  const handleAddPost = async () => {
     if (!title && !body) return;
 
     const newPost = {
@@ -70,18 +73,15 @@ export const FormDialog: FC<Props> = ({
     };
 
     try {
-      dispatch(addPostThunk(newPost));
+      await dispatch(addPostThunk(newPost));
+      toast.success("The post was created successfully");
     } catch (error) {
-      toast.error("Error during update");
+      toast.error("Error during insert");
     }
-    toast.success("The post was successfully updated");
-    // Reset form fields
-    setTitle("");
-    setBody("");
     handleClose();
   };
 
-  const handleEditPost = () => {
+  const handleEditPost = async () => {
     if (!title && !body) return;
 
     const editedPost = {
@@ -91,11 +91,14 @@ export const FormDialog: FC<Props> = ({
       userId: editPost.userId,
     } as IPost;
 
-    dispatch(updatePostThunk(editedPost));
+    try {
+      await dispatch(updatePostThunk(editedPost));
+      toast.success("The post was successfully updated");
+    } catch (error) {
+      toast.error("Error during update");
+    }
     handleClose();
   };
-  // Validation not only whitespace
-  const validateInput = (value: string) => validateTrim(value);
 
   return (
     <div>

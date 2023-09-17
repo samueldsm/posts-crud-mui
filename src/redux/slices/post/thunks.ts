@@ -52,7 +52,8 @@ export const updatePostThunk = (post: IPost) => {
       } catch (error) {
         console.log("Error in PUT method", error);
       }
-    } else dispatch(updatePost(post)); //Most be {data} intend. it's only for test)
+      //This ELSE is because the "postApi" is an api fake
+    } else dispatch(updatePost(post));
   };
 };
 
