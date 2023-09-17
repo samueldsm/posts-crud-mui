@@ -8,7 +8,6 @@ import {
   updatePost,
   deletePost,
 } from "./postSlice";
-import { toast } from "react-toastify";
 
 export const getPost = () => {
   // TODO: Infer types of dispatch and getState
@@ -46,12 +45,14 @@ export const updatePostThunk = (post: IPost) => {
   // TODO: Infer types of dispatch and getState
   return async (dispatch: any, getState: any) => {
     dispatch(startLoadingPosts());
-    try {
-      const { data } = await postApi.put(`/posts/${post.id}`, post);
-      dispatch(updatePost(post)); //Most be {data} intend. it's for test
-    } catch (error) {
-      console.log("Error in PUT method", error);
-    }
+    if (post.id <= 100 && post.id >= 1) {
+      try {
+        const { data } = await postApi.put(`/posts/${post.id}`, post);
+        dispatch(updatePost(post)); //Most be {data} intend. it's only for test
+      } catch (error) {
+        console.log("Error in PUT method", error);
+      }
+    } else dispatch(updatePost(post)); //Most be {data} intend. it's only for test)
   };
 };
 

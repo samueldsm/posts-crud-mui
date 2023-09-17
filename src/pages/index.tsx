@@ -19,6 +19,7 @@ import { DeleteDialog } from "../components/posts/deleteDialog";
 import { IPost } from "@/interfaces";
 import { getPost } from "@/redux/slices/post";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import Notify from "@/components/toast/notify";
 
 export default function PostsPage() {
   const [postId, setPostId] = useState(-1);
@@ -140,7 +141,7 @@ export default function PostsPage() {
           setOpenDeleteDialog={setOpenDeleteDialog}
         />
 
-        {/* <Notify /> */}
+        <Notify />
       </PostLayout>
     </>
   );
