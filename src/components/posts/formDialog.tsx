@@ -117,7 +117,7 @@ export const FormDialog: FC<Props> = ({
         >
           <CloseIcon />
         </IconButton>
-        {/* TODO: finish this design  */}
+        {/* TODO: Repair errors messages dimensions*/}
         <DialogContent dividers>
           <TextField
             id="title"

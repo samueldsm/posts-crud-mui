@@ -25,6 +25,7 @@ export default function PostsPage() {
   const [postId, setPostId] = useState(-1);
   const [isUpdate, setIsUpdate] = useState(false);
   const [openForm, setOpenForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [editPost, setEditPost] = useState<IPost>({
     id: -1,
@@ -38,6 +39,10 @@ export default function PostsPage() {
   useEffect(() => {
     dispatch(getPost());
   }, []);
+
+  const filteredPost = posts.filter((post: IPost) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleClickOpenDeleteDialog = (id: number) => {
     setPostId(id);
@@ -61,7 +66,6 @@ export default function PostsPage() {
       width: 120,
       renderCell: ({ row }: GridRenderCellParams) => {
         return (
-          //TODO: Make this <ButtonGroup/>  with a responsive design
           <ButtonGroup variant="text" aria-label="text button group">
             <Button
               color="info"
@@ -79,7 +83,7 @@ export default function PostsPage() {
     },
   ];
 
-  const rows = posts.map((post: IPost) => ({
+  const rows = filteredPost.map((post: IPost) => ({
     id: post.id,
     title: post.title,
     body: post.body,
@@ -110,14 +114,16 @@ export default function PostsPage() {
             className="border"
             sx={{ width: "100%", height: "100%" }}
           >
-            <SearchInput />
+            <SearchInput
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
           </Grid>
           <Grid item xs={12} sx={{ minWidth: 700, minHeight: 340 }}>
             <DataGrid
               rows={rows}
               columns={columns}
               hideFooterSelectedRowCount
-              //Edit for when is loading
               loading={isLoading}
               // density="compact"
               initialState={{
