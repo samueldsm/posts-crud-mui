@@ -93,7 +93,13 @@ export default function PostsPage() {
         <Grid
           container
           spacing={2}
-          sx={{ mt: 2, paddingLeft: 4, paddingRight: 4, minWidth: 700 }}
+          sx={{
+            mt: 2,
+            paddingLeft: 4,
+            paddingRight: 4,
+            minWidth: 700,
+            minHeight: 300,
+          }}
         >
           <Grid item xs={8}>
             <AddButton setOpenForm={setOpenForm} />
@@ -106,7 +112,7 @@ export default function PostsPage() {
           >
             <SearchInput />
           </Grid>
-          <Grid item xs={12} sx={{ minWidth: 700 }}>
+          <Grid item xs={12} sx={{ minWidth: 700, minHeight: 340 }}>
             <DataGrid
               rows={rows}
               columns={columns}

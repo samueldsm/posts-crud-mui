@@ -5,6 +5,7 @@ export const SearchInput = () => {
     <TextField
       sx={{ width: "100%", height: "10%" }}
       id="outlined-basic"
+      type="search"
       label="Search"
       variant="outlined"
     />
